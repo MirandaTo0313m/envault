@@ -1,13 +1,13 @@
-import path from 'path';
-
-export const ENVAULT_DIR = path.resolve('.envault');
-export const PUBLIC_KEY_FILE = path.join(ENVAULT_DIR, 'key.pub');
-export const PRIVATE_KEY_FILE = path.join(ENVAULT_DIR, 'key.priv');
-export const ENCRYPTED_ENV_FILE = path.join(ENVAULT_DIR, 'env.enc');
-export const GITIGNORE_FILE = path.resolve('.gitignore');
-
-export const ENVAULT_GITIGNORE_ENTRIES = [
-  '.envault/key.priv',
-  '*.env',
-  '.env',
-];
+export const VAULT_FILE = '.env.vault';
+export const ENV_FILE = '.env';
+export const PUBLIC_KEY_FILE = '.envault/public.pem';
+export const PRIVATE_KEY_FILE = '.envault/private.pem';
+export const GITIGNORE_FILE = '.gitignore';
+export const KEY_BACKUP_DIR = '.envault/backups';
+export const HISTORY_FILE = '.envault/history.log';
+export const MAX_BACKUPS = 5;
+export const VERIFY_EXIT_CODE_MISMATCH = 1;
+export const TAG_SEPARATOR = ',';
+export const VAULT_COMMENT_PREFIX = '#';
+export const DEFAULT_EXPORT_FORMAT = 'env';
+export const SUPPORTED_EXPORT_FORMATS = ['env', 'json', 'yaml'] as const;
