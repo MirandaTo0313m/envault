@@ -34,6 +34,13 @@ describe('parseVaultWithComments', () => {
     const entries = parseVaultWithComments(content);
     expect(entries[0].comment).toBeUndefined();
   });
+
+  it('parses multiple entries each with their own comment', () => {
+    const content = '# first comment\nFOO=bar\n# second comment\nBAZ=qux\n';
+    const entries = parseVaultWithComments(content);
+    expect(entries[0].comment).toBe('first comment');
+    expect(entries[1].comment).toBe('second comment');
+  });
 });
 
 describe('serializeVaultWithComments', () => {
@@ -49,6 +56,15 @@ describe('serializeVaultWithComments', () => {
     const out = serializeVaultWithComments(entries);
     expect(out).not.toContain('#');
     expect(out).toContain('FOO=bar');
+  });
+
+  it('places comment on the line immediately before the key', () => {
+    const entries = [{ key: 'FOO', value: 'bar', comment: 'my comment' }];
+    const out = serializeVaultWithComments(entries);
+    const lines = out.split('\n').filter(Boolean);
+    const commentIndex = lines.findIndex((l) => l === '# my comment');
+    const keyIndex = lines.findIndex((l) => l.startsWith('FOO='));
+    expect(keyIndex).toBe(commentIndex + 1);
   });
 });
 
