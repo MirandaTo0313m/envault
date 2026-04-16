@@ -53,4 +53,11 @@ program
   .option('--env <path>', 'Path to .env file', ENV_FILE)
   .action((opts) => runVerify(opts.vault, opts.env));
 
+// Handle unknown commands gracefully instead of exiting silently
+program.on('command:*', (operands) => {
+  console.error(`error: unknown command '${operands[0]}'`);
+  console.error('Run \'envault --help\' for a list of available commands.');
+  process.exitCode = 1;
+});
+
 program.parse(process.argv);
