@@ -55,6 +55,17 @@ export function compareVaults(
   return { onlyInA, onlyInB, different, same };
 }
 
+/**
+ * Returns true if the two vaults are identical (no missing or differing keys).
+ */
+export function vaultsAreEqual(result: CompareResult): boolean {
+  return (
+    result.onlyInA.length === 0 &&
+    result.onlyInB.length === 0 &&
+    result.different.length === 0
+  );
+}
+
 export function runCompare(
   fileA: string,
   fileB: string,
@@ -86,6 +97,10 @@ export function runCompare(
     result.different.forEach(k => console.log(`  ~ ${k}`));
   }
   if (!options.quiet) {
-    console.log(`\nSame: ${result.same.length} key(s)`);
+    if (vaultsAreEqual(result)) {
+      console.log('\nVaults are identical.');
+    } else {
+      console.log(`\nSame: ${result.same.length} key(s)`);
+    }
   }
 }
