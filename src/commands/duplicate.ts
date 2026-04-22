@@ -30,8 +30,11 @@ export function duplicateKeyInVault(
   const value = entries.get(sourceKey)!;
   const lines = content.split('\n');
   const result: string[] = [...lines];
-  // Insert after the source key line
-  const srcIdx = lines.findIndex(l => l.trim().startsWith(sourceKey + '='));
+  // Insert after the source key line, matching key= at start of trimmed line
+  const srcIdx = lines.findIndex(l => {
+    const trimmed = l.trim();
+    return trimmed === `${sourceKey}=${value}` || trimmed.startsWith(`${sourceKey}=`);
+  });
   if (srcIdx !== -1) {
     result.splice(srcIdx + 1, 0, `${destKey}=${value}`);
   } else {
@@ -53,7 +56,7 @@ export function runDuplicate(
   try {
     const updated = duplicateKeyInVault(content, sourceKey, destKey);
     fs.writeFileSync(vaultPath, updated, 'utf-8');
-    console.log(`Duplicated "${sourceKey}" → "${destKey}"`);
+    console.log(`Duplicated "${sourceKey}" \u2192 "${destKey}"`);
   } catch (err: any) {
     console.error(err.message);
     process.exit(1);
