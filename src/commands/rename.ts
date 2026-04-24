@@ -13,6 +13,19 @@ export function renameKeyInVault(
 
   const lines = fs.readFileSync(vaultPath, "utf-8").split("\n");
   let found = false;
+
+  // Check if newKey already exists in the vault to prevent duplicates
+  const newKeyExists = lines.some((line) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("#") || !trimmed.includes("=")) return false;
+    const key = trimmed.substring(0, trimmed.indexOf("=")).trim();
+    return key === newKey;
+  });
+
+  if (newKeyExists) {
+    throw new Error(`Key "${newKey}" already exists in vault.`);
+  }
+
   const updated = lines.map((line) => {
     const trimmed = line.trim();
     if (trimmed.startsWith("#") || !trimmed.includes("=")) return line;
